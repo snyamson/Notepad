@@ -25,4 +25,26 @@ const insertNewNote = (title, content) => {
   });
 };
 
-export { setUpDatabase, insertNewNote };
+const updateNote = ({ title, content, id }) => {
+  db.transaction((tx) => {
+    tx.executeSql(
+      "UPDATE note SET title=?, content=?, created_At=? WHERE id=?;",
+      [title, content, moment().format("LLL").toString(), id],
+      (txObj, resultSet) => console.log(resultSet),
+      (txObj, error) => console.error("Error Updating the note: ", error)
+    );
+  });
+};
+
+const deleteNote = (id) => {
+  db.transaction((tx) => {
+    tx.executeSql(
+      "DELETE FROM note WHERE id=?",
+      [id],
+      () => console.log("note deleted successfully"),
+      (error) => console.error(`Error deleting the note ${error}`)
+    );
+  });
+};
+
+export { setUpDatabase, insertNewNote, deleteNote, updateNote };

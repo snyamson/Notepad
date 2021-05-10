@@ -5,6 +5,7 @@ export default function HeaderButton({
   onPress,
   IconName,
   fontFamily = "Ionicons",
+  fontSize = 30,
   ...props
 }) {
   return (
@@ -12,7 +13,7 @@ export default function HeaderButton({
       <Icon
         name={IconName}
         fontFamily={fontFamily}
-        fontSize={30}
+        fontSize={fontSize}
         color="LIGHT_BLUE_COLOR"
       />
     </Button>

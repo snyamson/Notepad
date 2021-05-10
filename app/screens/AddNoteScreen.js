@@ -3,7 +3,8 @@ import { Modal, Div, Header, Text } from "react-native-magnus";
 import { Keyboard } from "react-native";
 import moment from "moment";
 import { insertNewNote } from "../database/databaseApi";
-import { HeaderButton, TextInput } from "../components";
+import HeaderButton from "../components/HeaderButton";
+import TextInput from "../components/TextInput";
 
 export default function AddNoteScreen({ isVisible, handleModal, onAddNote }) {
   const [title, setTitle] = useState("");
@@ -11,15 +12,19 @@ export default function AddNoteScreen({ isVisible, handleModal, onAddNote }) {
   const [active, setActive] = useState("");
   return (
     <Modal
-      onModalHide={() => {
+      onModalWillHide={() => {
+        onAddNote(true);
+      }}
+      onModalWillShow={() => {
         setActive("");
         setTitle("");
         setContent("");
-        onAddNote(true);
       }}
       isVisible={isVisible}
       animationIn="slideInRight"
       animationOut="slideOutRight"
+      backdropOpacity={0}
+      onRequestClose={() => handleModal(false)}
     >
       <Div flex={1} bg="GREY_COLOR_3">
         <Header
@@ -38,8 +43,8 @@ export default function AddNoteScreen({ isVisible, handleModal, onAddNote }) {
               <HeaderButton
                 onPress={() => {
                   Keyboard.dismiss();
-                  insertNewNote(title, content);
                   handleModal(false);
+                  insertNewNote(title, content);
                 }}
                 IconName="ios-checkmark-sharp"
                 pr="lg"

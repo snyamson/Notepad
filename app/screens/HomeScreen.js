@@ -2,7 +2,9 @@ import React, { useContext, useEffect, useState } from "react";
 import { Div, Text } from "react-native-magnus";
 import { FlatList } from "react-native";
 import { NotesContext } from "../contexts/NotesContext";
-import { NoteCard, AppButton, SearchBarButton } from "../components";
+import NoteCard from "../components/NoteCard";
+import AppButton from "../components/AppButton";
+import SearchBarButton from "../components/SearchBarButton";
 import AddNoteScreen from "./AddNoteScreen";
 import { setUpDatabase } from "../database/databaseApi";
 import * as SQLite from "expo-sqlite";
@@ -15,7 +17,12 @@ export default function HomeScreen() {
   const [addedNote, setAddedNote] = useState(false);
 
   const renderItem = ({ item }) => (
-    <NoteCard note={item} onAddNote={checkAddedNote} />
+    <NoteCard
+      note={item}
+      title={item.title}
+      content={item.content}
+      onAddNote={checkAddedNote}
+    />
   );
 
   const handleModal = (Boolean) => {

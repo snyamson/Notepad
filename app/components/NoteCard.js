@@ -11,25 +11,33 @@ export default NoteCard = ({ note, onAddNote }) => {
   return (
     <>
       <TouchableWithoutFeedback onPress={() => handleViewModal(true)}>
-        <Div my={7} bg="GREY_COLOR_2" py={10} w="100%" rounded="lg" px={15}>
+        <Div my={5} bg="GREY_COLOR_2" w="100%" rounded="lg" px={15}>
+          {note.title.length === 0 ? null : (
+            <Text
+              numberOfLines={1}
+              fontSize="4xl"
+              fontWeight="bold"
+              color="BLACK_COLOR_2"
+              mt="md"
+            >
+              {note.title}
+            </Text>
+          )}
+
           <Text
+            fontSize="2xl"
+            color="BLACK_COLOR_3"
+            mt={note.title.length === 0 ? "lg" : null}
             numberOfLines={1}
-            fontSize="4xl"
-            fontWeight="bold"
-            color="BLACK_COLOR_2"
-            mt="lg"
-            mb="xs"
           >
-            {note.title}
-          </Text>
-          <Text fontSize="2xl" color="BLACK_COLOR_3" numberOfLines={1}>
             {note.content}
           </Text>
+
           <Text
-            fontSize="3xl"
+            fontSize="xl"
             color="GREY_COLOR_1"
-            mt="xl"
-            mb="md"
+            mt={13}
+            mb="lg"
             numberOfLines={1}
           >
             {note.created_At}

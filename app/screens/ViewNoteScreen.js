@@ -2,8 +2,9 @@ import React, { useState, useContext } from "react";
 import { Modal, Div, Header, Text } from "react-native-magnus";
 import moment from "moment";
 import * as SQLite from "expo-sqlite";
-import { HeaderButton, TextInput } from "../components";
-import { NotesContext } from "../contexts/NotesContext";
+import HeaderButton from "../components/HeaderButton";
+import TextInput from "../components/TextInput";
+import { deleteNote } from "../database/databaseApi";
 
 const db = SQLite.openDatabase("notesDB.db");
 
@@ -13,7 +14,6 @@ export default function AddNoteScreen({
   note,
   onAddNote,
 }) {
-  const [setNotes] = useContext(NotesContext);
   const [active, setActive] = useState("");
   const [updateTitle, setUpdateTitle] = useState(note.title);
   const [updateContent, setUpdateContent] = useState(note.content);
@@ -34,17 +34,22 @@ export default function AddNoteScreen({
     });
   };
 
+  const cleanUp = () => {
+    setActive("");
+    setUpdateTitle("");
+    setUpdateContent("");
+  };
+
   return (
     <Modal
-      onModalHide={() => {
+      onModalWillHide={() => {
         onAddNote(true);
-        setActive("");
-        setUpdateTitle("");
-        setUpdateContent("");
       }}
       isVisible={isVisible}
       animationIn="slideInRight"
       animationOut="slideOutRight"
+      backdropOpacity={0}
+      onRequestClose={() => handleViewModal(false)}
     >
       <Div flex={1} bg="GREY_COLOR_3">
         <Header
@@ -61,9 +66,10 @@ export default function AddNoteScreen({
           suffix={
             active.length > 0 ? (
               <HeaderButton
-                onPress={() => {
+                onPress={async () => {
                   updateNote();
                   handleViewModal(false);
+                  await cleanUp();
                 }}
                 IconName="ios-checkmark-sharp"
                 pr="lg"
@@ -71,7 +77,10 @@ export default function AddNoteScreen({
             ) : (
               <HeaderButton
                 IconName="ios-trash-outline"
-                onPress={() => console.log("delete this note", note.id)}
+                onPress={async () => {
+                  await handleViewModal(false);
+                  await deleteNote(note.id);
+                }}
               />
             )
           }
@@ -80,12 +89,13 @@ export default function AddNoteScreen({
             Note
           </Text>
         </Header>
-        <Text fontSize="2xl" ml="xl" py="lg" mb="lg">
-          {moment().format("LLL")}
+        <Text fontSize="3xl" ml="xl" py="lg" mb="lg">
+          {note.created_At}
         </Text>
         <Div px="xl">
           <TextInput
-            defaultValue={note.title.length > 0 ? note.title : "Title"}
+            defaultValue={note.title}
+            title="Title"
             multiline
             fontSize={32}
             onChangeText={(text) => setUpdateTitle(text)}
@@ -98,7 +108,11 @@ export default function AddNoteScreen({
             defaultValue={note.content}
             multiline
             placeholderTextColor="gray800"
+            title="Note something down"
             onChangeText={(text) => setUpdateContent(text)}
+            onChange={({ nativeEvent: { text } }) => {
+              setActive(text);
+            }}
           />
         </Div>
       </Div>
