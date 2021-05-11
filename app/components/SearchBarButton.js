@@ -1,9 +1,8 @@
 import React, { useState } from "react";
 import { Div, Text, Button, Icon } from "react-native-magnus";
-import SearchBar from "react-native-platform-searchbar";
 import SearchNoteScreen from "../screens/SearchNoteScreen";
 
-export default function SearchBarButton() {
+export default function SearchBarButton({ onAddNote }) {
   const [modalVisible, setModalVisible] = useState(false);
   const handleSearchModal = (Boolean) => {
     setModalVisible(Boolean);
@@ -37,6 +36,7 @@ export default function SearchBarButton() {
       <SearchNoteScreen
         isVisible={modalVisible}
         handleSearchModal={handleSearchModal}
+        onAddNote={onAddNote}
       />
     </>
   );

@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import { Div, Text } from "react-native-magnus";
+import { Div, Text, Image } from "react-native-magnus";
 import { FlatList } from "react-native";
 import { NotesContext } from "../contexts/NotesContext";
 import NoteCard from "../components/NoteCard";
@@ -59,13 +59,31 @@ export default function HomeScreen() {
             Notepad
           </Text>
         </Div>
-        <SearchBarButton />
-        <FlatList
-          data={notes}
-          keyExtractor={(note) => note.id.toString()}
-          renderItem={renderItem}
-          showsVerticalScrollIndicator={false}
-        />
+        {notes.length === 0 ? (
+          <Div flex={1} alignItems="center">
+            <Image
+              source={require("../assets/notebook.png")}
+              h={250}
+              w={350}
+              mt={60}
+              mb="2xl"
+            />
+            <Text fontSize="xl">
+              A record of your past path and a reminder of your future steps
+            </Text>
+          </Div>
+        ) : (
+          <Div>
+            <SearchBarButton onAddNote={checkAddedNote} />
+            <FlatList
+              data={notes}
+              keyExtractor={(note) => note.id.toString()}
+              renderItem={renderItem}
+              showsVerticalScrollIndicator={false}
+            />
+          </Div>
+        )}
+
         <AppButton onPress={() => handleModal(true)} />
       </Div>
       <AddNoteScreen

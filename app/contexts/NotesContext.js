@@ -3,7 +3,7 @@ import React, { createContext, useState } from "react";
 export const NotesContext = createContext();
 
 export const NotesProvider = ({ children }) => {
-  const [notes, setNotes] = useState(null);
+  const [notes, setNotes] = useState([]);
 
   const [addedNote, setAddedNote] = useState(false);
   return (

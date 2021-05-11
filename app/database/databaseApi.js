@@ -8,7 +8,7 @@ const setUpDatabase = () => {
     tx.executeSql(
       "CREATE TABLE IF NOT EXISTS note(id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT, content TEXT, created_At TEXT)",
       null,
-      () => console.log("Success: connected to the database"),
+      null,
       (error) => console.log(error)
     );
   });
@@ -19,7 +19,7 @@ const insertNewNote = (title, content) => {
     tx.executeSql(
       "INSERT INTO note(title, content, created_At) VALUES(?,?,?)",
       [title, content, moment().format("LLL").toString()],
-      () => console.log("Success: inserted a new note"),
+      null,
       (error) => console.log(`Error: ${error}`)
     );
   });
@@ -30,7 +30,7 @@ const updateNote = ({ title, content, id }) => {
     tx.executeSql(
       "UPDATE note SET title=?, content=?, created_At=? WHERE id=?;",
       [title, content, moment().format("LLL").toString(), id],
-      (txObj, resultSet) => console.log(resultSet),
+      null,
       (txObj, error) => console.error("Error Updating the note: ", error)
     );
   });
@@ -38,11 +38,8 @@ const updateNote = ({ title, content, id }) => {
 
 const deleteNote = (id) => {
   db.transaction((tx) => {
-    tx.executeSql(
-      "DELETE FROM note WHERE id=?",
-      [id],
-      () => console.log("note deleted successfully"),
-      (error) => console.error(`Error deleting the note ${error}`)
+    tx.executeSql("DELETE FROM note WHERE id=?", [id], null, (error) =>
+      console.error(`Error deleting the note ${error}`)
     );
   });
 };

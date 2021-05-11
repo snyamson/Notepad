@@ -1,15 +1,15 @@
-import React, { useState } from "react";
+import React from "react";
 import { ActivityIndicator } from "react-native";
-import { Div } from "react-native-magnus";
 import SearchBar from "react-native-platform-searchbar";
 
-export default function AppSearchBar() {
-  const [value, setValue] = useState("");
-  const [loading, setLoading] = useState(false);
+export default function AppSearchBar({ value, onFilter, loading }) {
+  if (value.trim().length > 0) loading = true;
+
   return (
     <SearchBar
       value={value}
-      onChangeText={setValue}
+      onChangeText={(text) => onFilter(text)}
+      onClear={(text) => onFilter("")}
       placeholder="Search here"
       theme="light"
       platform="ios"
